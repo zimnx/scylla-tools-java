@@ -17,6 +17,7 @@
  */
 package org.apache.cassandra.stress.util;
 
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -128,6 +129,9 @@ public class JavaDriverClient
             poolingOpts.setMaxRequestsPerConnection(HostDistance.LOCAL, maxPendingPerConnection);
         }
 
+        System.out.println("Using Cloud bundle");
+        File bundle = new File("/tmp/bundle/bundle.zip");
+
         Cluster.Builder clusterBuilder = Cluster.builder()
                                                 .addContactPoint(host)
                                                 .withPort(port)
@@ -156,6 +160,8 @@ public class JavaDriverClient
         {
             clusterBuilder.withCredentials(username, password);
         }
+
+        clusterBuilder.withCloudSecureConnectBundle(bundle);
 
         cluster = clusterBuilder.build();
         Metadata metadata = cluster.getMetadata();

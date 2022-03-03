@@ -125,34 +125,35 @@ public class SmartThriftClient implements ThriftClient
 
     private Client get(ByteBuffer pk)
     {
-        Set<Host> hosts = metadata.getReplicas(metadata.quote(keyspace), pk);
-        InetAddress address = null;
-        if (hosts.size() > 0)
-        {
-            int pos = roundrobin.incrementAndGet() % hosts.size();
-            for (int i = 0 ; address == null && i < hosts.size() ; i++)
-            {
-                if (pos < 0)
-                    pos = -pos;
-                Host host = Iterators.get(hosts.iterator(), (pos + i) % hosts.size());
-                if (whiteset == null || whiteset.contains(host.getAddress()))
-                    address = host.getAddress();
-            }
-        }
-        if (address == null)
-            address = whitelist.get(ThreadLocalRandom.current().nextInt(whitelist.size()));
-        ConcurrentLinkedQueue<Client> q = cache.get(address);
-        if (q == null)
-        {
-            ConcurrentLinkedQueue<Client> newQ = new ConcurrentLinkedQueue<Client>();
-            q = cache.putIfAbsent(address, newQ);
-            if (q == null)
-                q = newQ;
-        }
-        Client tclient = q.poll();
-        if (tclient != null)
-            return tclient;
-        return new Client(settings.getRawThriftClient(address.getHostAddress()), address);
+        return null;
+//        Set<Host> hosts = metadata.getReplicas(metadata.quote(keyspace), pk);
+//        InetAddress address = null;
+//        if (hosts.size() > 0)
+//        {
+//            int pos = roundrobin.incrementAndGet() % hosts.size();
+//            for (int i = 0 ; address == null && i < hosts.size() ; i++)
+//            {
+//                if (pos < 0)
+//                    pos = -pos;
+//                Host host = Iterators.get(hosts.iterator(), (pos + i) % hosts.size());
+//                if (whiteset == null || whiteset.contains(host.getAddress()))
+//                    address = host.getAddress();
+//            }
+//        }
+//        if (address == null)
+//            address = whitelist.get(ThreadLocalRandom.current().nextInt(whitelist.size()));
+//        ConcurrentLinkedQueue<Client> q = cache.get(address);
+//        if (q == null)
+//        {
+//            ConcurrentLinkedQueue<Client> newQ = new ConcurrentLinkedQueue<Client>();
+//            q = cache.putIfAbsent(address, newQ);
+//            if (q == null)
+//                q = newQ;
+//        }
+//        Client tclient = q.poll();
+//        if (tclient != null)
+//            return tclient;
+//        return new Client(settings.getRawThriftClient(address.getHostAddress()), address);
     }
 
     @Override

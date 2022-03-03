@@ -36,8 +36,7 @@ if [ -z "$CLASSPATH" ]; then
     echo "You must set the CLASSPATH var" >&2
     exit 1
 fi
-
-"$JAVA" -server -ea -cp "$CLASSPATH" $JVM_OPTS \
+"$JAVA" -server -ea -cp "/home/maciej/work/src/github.com/scylladb/scylla-tools-java/build/tools/lib/:$CLASSPATH" $JVM_OPTS \
         $CONFIGURATION_FILE_OPT \
         -Dcassandra.storagedir="$cassandra_storagedir" \
         -Dlogback.configurationFile=logback-tools.xml \
